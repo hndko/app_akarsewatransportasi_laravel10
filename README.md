@@ -1,118 +1,227 @@
-**Web Akar Transportasi**
+<div align="center">
 
-Versi singkat: Sistem manajemen sewa kendaraan sederhana berbasis Laravel — mencakup manajemen kendaraan, transaksi sewa, pengeluaran, dan kas. Repositori ini DIBUKA UNTUK PUBLIK; siap diambil, dipakai, dan dikembangkan ulang oleh siapa saja.
+# 🚗 Akar Sewa Transportasi
 
-**Daftar Isi**
+**Sistem Manajemen Sewa Kendaraan berbasis Web**
 
-- **Deskripsi Proyek**
-- **Fitur**
-- **Struktur Database (ringkasan)**
-- **UML (diagram kelas)**
-- **Cara Menjalankan (Running)**
-- **Seeder & Data Contoh**
-- **Lisensi**
+> Aplikasi full-stack untuk mengelola armada kendaraan, transaksi sewa, pengeluaran, dan arus kas usaha transportasi — dibangun dengan Laravel 10 & React (Inertia.js).
 
-**Deskripsi Proyek**
+[![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![Inertia.js](https://img.shields.io/badge/Inertia.js-1.x-9553E9?style=for-the-badge&logo=inertia&logoColor=white)](https://inertiajs.com)
+[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.x-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![PHP](https://img.shields.io/badge/PHP-8.1%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-- Proyek ini adalah aplikasi backend/admin sederhana untuk pengelolaan sewa kendaraan dan kas usaha. Dibangun menggunakan Laravel (PHP) dengan struktur model: `Kas`, `Sewa`, `Pengeluaran`, `Kendaraan`, `SewaKendaraan`, `SewaLainnya` dan `User`.
+</div>
 
-**Fitur**
+---
 
-- **Autentikasi pengguna**: level pengguna (`Pegawai`, `Owner`).
-- **Manajemen Kendaraan**: tambah/ubah/hapus kendaraan (nama, no registrasi, jenis, tahun, warna, status).
-- **Transaksi Sewa**: buat transaksi sewa, pilih kendaraan terkait, metode pembayaran, tanggal mulai/akhir.
-- **Pengeluaran**: pencatatan pengeluaran kas dengan keterangan dan metode pembayaran.
-- **Kas**: entitas `kas` yang terhubung ke transaksi sewa dan pengeluaran lewat `kode`.
-- **Seeder data contoh**: data dummy untuk mempermudah pengujian.
+## 📌 Tentang Proyek
 
-**Struktur Database (ringkasan tabel utama)**
+**Akar Sewa Transportasi** adalah aplikasi manajemen operasional berbasis web yang dirancang untuk membantu usaha sewa kendaraan dalam:
 
-- `users` — `id, name, email, email_verified_at, level, password, remember_token, timestamps`
-- `kas` — `id, kode(unique), timestamps`
-- `kendaraans` — `id, nama, no_registrasi(unique), jenis, tahun_pembuatan, warna, status, timestamps`
-- `sewa` — `id, kode(unique), nama, mulai_tanggal, akhir_tanggal, total, pembayaran, metode, timestamps` (kolom `kode` merefer ke `kas.kode`)
-- `pengeluarans` — `id, kode(unique), nama, tanggal, keterangan, total, metode, timestamps` (kolom `kode` merefer ke `kas.kode`)
-- `sewa_kendaraans` — `id, kode, kendaraan_id, timestamps` (relasi ke `sewa.kode` dan `kendaraans.id`)
-- `sewa_lainnya` — `id, kode_sewa, nama, total, jumlah, metode, timestamps` (relasi ke `sewa.kode`)
+- Mengelola **armada kendaraan** secara terpusat
+- Mencatat dan melacak **transaksi sewa** dengan detail
+- Memantau **pengeluaran** dan **arus kas** usaha
+- Mengatur akses pengguna berdasarkan **level (Pegawai / Owner)**
 
-Jika butuh detail kolom lengkap, lihat migrasi di `database/migrations/`.
+Repositori ini **terbuka untuk publik** — bebas digunakan, dipelajari, dan dikembangkan lebih lanjut.
 
-**UML (Diagram Kelas — Mermaid)**
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Teknologi |
+|---|---|
+| **Backend** | PHP 8.1+, Laravel 10, Laravel Sanctum |
+| **Frontend** | React 18, Inertia.js, Tailwind CSS |
+| **Build Tool** | Vite 5 |
+| **Database** | MySQL / MariaDB |
+| **Auth** | Laravel Breeze |
+| **Utilities** | react-toastify, react-datepicker, react-to-print, Yup, Ziggy |
+
+---
+
+## ✨ Fitur Utama
+
+- 🔐 **Autentikasi & Otorisasi** — Login dengan dua level akses: `Pegawai` dan `Owner`
+- 🚘 **Manajemen Kendaraan** — CRUD kendaraan lengkap (nama, nomor registrasi, jenis, tahun, warna, status)
+- �� **Transaksi Sewa** — Pembuatan transaksi sewa dengan pemilihan kendaraan, metode pembayaran, tanggal mulai & selesai
+- 💸 **Pencatatan Pengeluaran** — Catat pengeluaran operasional dengan keterangan dan metode pembayaran
+- 💰 **Manajemen Kas** — Entitas `kas` terpusat yang terhubung ke transaksi sewa dan pengeluaran
+- 🖨️ **Cetak Laporan** — Ekspor/cetak laporan transaksi langsung dari browser
+- 🌱 **Data Seeder** — Data dummy siap pakai untuk keperluan pengujian dan demonstrasi
+
+---
+
+## 🗄️ Struktur Database
+
+| Tabel | Kolom Utama |
+|---|---|
+| `users` | id, name, email, level, password |
+| `kas` | id, kode *(unique)* |
+| `kendaraans` | id, nama, no_registrasi, jenis, tahun_pembuatan, warna, status |
+| `sewa` | id, kode, nama, mulai_tanggal, akhir_tanggal, total, pembayaran, metode |
+| `pengeluarans` | id, kode, nama, tanggal, keterangan, total, metode |
+| `sewa_kendaraans` | id, kode *(→ sewa)*, kendaraan_id *(→ kendaraans)* |
+| `sewa_lainnya` | id, kode_sewa *(→ sewa)*, nama, total, jumlah, metode |
+
+> Detail lengkap setiap kolom tersedia di `database/migrations/`.
+
+---
+
+## 🔗 Diagram Relasi (Class Diagram)
 
 ```mermaid
 classDiagram
-	class Kas { +id\n+kode }
-	class Sewa { +id\n+kode\n+nama\n+mulai_tanggal\n+akhir_tanggal\n+total\n+pembayaran\n+metode }
-	class Pengeluaran { +id\n+kode\n+nama\n+tanggal\n+keterangan\n+total\n+metode }
-	class Kendaraan { +id\n+nama\n+no_registrasi\n+jenis\n+tahun_pembuatan\n+warna\n+status }
-	class SewaKendaraan { +id\n+kode\n+kendaraan_id }
-	class SewaLainnya { +id\n+kode_sewa\n+nama\n+total\n+jumlah\n+metode }
+    class Kas {
+        +id
+        +kode
+    }
+    class Sewa {
+        +id
+        +kode
+        +nama
+        +mulai_tanggal
+        +akhir_tanggal
+        +total
+        +pembayaran
+        +metode
+    }
+    class Pengeluaran {
+        +id
+        +kode
+        +nama
+        +tanggal
+        +keterangan
+        +total
+        +metode
+    }
+    class Kendaraan {
+        +id
+        +nama
+        +no_registrasi
+        +jenis
+        +tahun_pembuatan
+        +warna
+        +status
+    }
+    class SewaKendaraan {
+        +id
+        +kode
+        +kendaraan_id
+    }
+    class SewaLainnya {
+        +id
+        +kode_sewa
+        +nama
+        +total
+        +jumlah
+        +metode
+    }
 
-	Kas "1" <-- "0..*" Sewa : kode
-	Kas "1" <-- "0..*" Pengeluaran : kode
-	Sewa "1" <-- "0..*" SewaKendaraan : kode
-	Kendaraan "1" <-- "0..*" SewaKendaraan : kendaraan_id
-	Sewa "1" <-- "0..*" SewaLainnya : kode_sewa
+    Kas "1" <-- "0..*" Sewa : kode
+    Kas "1" <-- "0..*" Pengeluaran : kode
+    Sewa "1" <-- "0..*" SewaKendaraan : kode
+    Kendaraan "1" <-- "0..*" SewaKendaraan : kendaraan_id
+    Sewa "1" <-- "0..*" SewaLainnya : kode_sewa
 ```
 
-**Cara Menjalankan (Quickstart)**
-Persyaratan: `PHP >= 8.x`, `Composer`, `Node.js` + `npm`/`yarn`, dan database MySQL/MariaDB. Di Windows, aplikasi ini sudah siap dijalankan di Laragon.
+---
 
-Langkah singkat:
+## 🚀 Cara Menjalankan
 
-1. Clone repositori:
+### Prasyarat
+
+- PHP >= 8.1
+- Composer
+- Node.js + npm
+- MySQL / MariaDB
+- *(Opsional)* [Laragon](https://laragon.org) untuk Windows (disarankan)
+
+### Langkah Instalasi
 
 ```bash
-git clone <repo-url>
-cd web_akar_transportasi
-```
+# 1. Clone repositori
+git clone https://github.com/hndko/app_akarsewatransportasi_laravel10.git
+cd app_akarsewatransportasi_laravel10
 
-2. Instal dependensi PHP dan Node:
-
-```bash
+# 2. Instal dependensi PHP
 composer install
+
+# 3. Instal dependensi Node
 npm install
-```
 
-3. Salin berkas lingkungan dan atur konfigurasi database di `.env`:
+# 4. Salin file environment
+cp .env.example .env        # Linux/Mac
+copy .env.example .env      # Windows
 
-```bash
-copy .env.example .env    # Windows
+# 5. Generate application key
 php artisan key:generate
 ```
 
-Edit `.env` lalu atur `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
+Edit `.env` dan sesuaikan konfigurasi database:
 
-4. Migrasi dan seed data contoh:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=akar_transportasi
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
 ```bash
+# 6. Jalankan migrasi dan seeder
 php artisan migrate --seed
-```
 
-5. Jalankan asset build (development):
-
-```bash
+# 7. Build asset frontend (development)
 npm run dev
-```
 
-6. Jalankan server lokal:
-
-```bash
+# 8. Jalankan server lokal
 php artisan serve
-# atau gunakan Laragon untuk environment Windows (lebih mudah)
 ```
 
-Endpoint web berada di `http://127.0.0.1:8000` secara default.
+Aplikasi berjalan di **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
 
-**Seeder & Data Contoh**
+---
 
-- `database/seeders/DatabaseSeeder.php` sudah menyediakan data contoh untuk `users`, `kas`, `kendaraans`, `sewa`, `pengeluarans`, dan `sewa_kendaraans`.
-- Akun contoh: `budi.santoso@example.com` dan password default `password` (harus diubah di produksi).
+## 👤 Akun Demo
 
-**Catatan Keamanan & Lisensi**
+| Role | Email | Password |
+|---|---|---|
+| Pegawai / Owner | `budi.santoso@example.com` | `password` |
 
-- Repositori ini terbuka untuk publik sesuai permintaan pemilik; pengguna lain bebas mengambil dan meneruskan proyek ini.
-- Pastikan menghapus atau mengubah kredensial default sebelum dipakai di lingkungan produksi.
-- Lisensi: sesuaikan dengan kebijakan Anda (belum ditentukan di repo ini). Jika ingin menggunakan MIT, tambahkan file `LICENSE`.
+> ⚠️ Ubah kredensial default sebelum digunakan di lingkungan produksi.
 
-Jika Anda ingin saya menambahkan file `LICENSE`, contoh README bahasa Inggris, atau men-deploy ke Heroku/Vercel/Laragon, beri tahu saya.
+---
+
+## 📁 Struktur Proyek (Ringkasan)
+
+```
+├── app/
+│   ├── Http/Controllers/   # Controller untuk setiap modul
+│   ├── Models/             # Kas, Kendaraan, Sewa, Pengeluaran, dll.
+│   └── Providers/
+├── database/
+│   ├── migrations/         # Skema database
+│   └── seeders/            # Data contoh
+├── resources/
+│   └── js/                 # Komponen React & halaman Inertia
+├── routes/
+│   └── web.php             # Definisi rute aplikasi
+└── public/
+```
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE). Bebas digunakan, dimodifikasi, dan didistribusikan dengan tetap mencantumkan atribusi.
+
+---
+
+<div align="center">
+  <sub>Dibuat dengan ❤️ menggunakan Laravel & React</sub>
+</div>
